@@ -31,7 +31,15 @@ public:
 
   const double &operator()(unsigned int row, unsigned int column) const;
 
-  void Calculate(double angle, char wymiar);
+  void rotuj_x(double kat);
+
+  void rotuj_y(double kat);
+
+  void rotuj_z(double kat);
+
+  void ModRotacji(double alpha, double beta, double gamma, Vector3D ve);
+
+  void WyswietlWynik();
 };
 
 template <int SIZE>
@@ -265,41 +273,13 @@ std::ostream &operator<<(std::ostream &out, const Matrix<SIZE> &tmp)
 |  Zwraca:                                                                    |
 |                                                                             |
 */
+
 template <int SIZE>
-void Matrix<SIZE>::Calculate(double angle, char wymiar)
+void Matrix<SIZE>::rotuj_x(double kat)
 {
-  //do
-  //{
+  double radian = kat * M_PI / 180;
 
-  double radian = angle * M_PI / 180;
-  if (wymiar == 'z')
-  {
-
-    matrix[0][0] = cos(radian);
-    matrix[0][1] = -sin(radian);
-    matrix[0][2] = 0;
-    matrix[1][0] = sin(radian);
-    matrix[1][1] = cos(radian);
-    matrix[1][2] = 0;
-    matrix[2][0] = 0;
-    matrix[2][1] = 0;
-    matrix[2][2] = 1;
-  }
-  if (wymiar == 'y')
-
-    matrix[0][0] = cos(radian);
-  matrix[0][1] = 0;
-  matrix[0][2] = sin(radian);
-  matrix[1][0] = 0;
-  matrix[1][1] = 1;
-  matrix[1][2] = 0;
-  matrix[2][0] = -sin(radian);
-  matrix[2][1] = 0;
-  matrix[2][2] = cos(radian);
-
-  if (wymiar == 'x')
-
-    matrix[0][0] = 1;
+  matrix[0][0] = 1;
   matrix[0][1] = 0;
   matrix[0][2] = 0;
   matrix[1][0] = 0;
@@ -308,7 +288,75 @@ void Matrix<SIZE>::Calculate(double angle, char wymiar)
   matrix[2][0] = 0;
   matrix[2][1] = sin(radian);
   matrix[2][2] = cos(radian);
-  //} while (wymiar == '.')
 }
+template <int SIZE>
+void Matrix<SIZE>::rotuj_y(double kat)
+{
+  double radian = kat * M_PI / 180;
 
+  matrix[0][0] = cos(radian);
+  matrix[0][1] = 0;
+  matrix[0][2] = sin(radian);
+  matrix[1][0] = 0;
+  matrix[1][1] = 1;
+  matrix[1][2] = 0;
+  matrix[2][0] = -sin(radian);
+  matrix[2][1] = 0;
+  matrix[2][2] = cos(radian);
+}
+template <int SIZE>
+void Matrix<SIZE>::rotuj_z(double kat)
+{
+  double radian = kat * M_PI / 180;
+
+  matrix[0][0] = cos(radian);
+  matrix[0][1] = -sin(radian);
+  matrix[0][2] = 0;
+  matrix[1][0] = sin(radian);
+  matrix[1][1] = cos(radian);
+  matrix[1][2] = 0;
+  matrix[2][0] = 0;
+  matrix[2][1] = 0;
+  matrix[2][2] = 1;
+}
+template <int SIZE>
+void Matrix<SIZE>::ModRotacji(double alpha, double beta, double gamma, Vector3D ve)
+{
+  matrix[0][0] = (cos(alpha) * cos(beta));
+  matrix[0][1] = (cos(alpha) * sin(beta) * sin(gamma)) - (sin(alpha) * cos(gamma));
+  matrix[0][2] = (cos(alpha) * sin(beta) * cos(gamma)) + (sin(alpha) * sin(gamma));
+  matrix[0][3] = ve[0];
+  matrix[1][0] = sin(alpha) * cos(beta);
+  matrix[1][1] = (sin(alpha) * sin(beta) * sin(gamma)) + (cos(alpha) * cos(gamma));
+  matrix[1][2] = (sin(alpha) * sin(beta) * cos(gamma)) - (cos(alpha) * cos(gamma));
+  matrix[1][3] = ve[1];
+  matrix[2][0] = -sin(beta);
+  matrix[2][1] = cos(beta) * cos(gamma);
+  matrix[2][2] = cos(beta) * cos(gamma);
+  matrix[2][3] = ve[2];
+  matrix[3][0] = 0;
+  matrix[3][1] = 0;
+  matrix[3][2] = 0;
+  matrix[3][3] = 1;
+}
+template <int SIZE>
+void Matrix<SIZE>::WyswietlWynik()
+{
+  matrix[0][0] = 0.275963;
+  matrix[0][1] = -0.0666459;
+  matrix[0][2] = 0.958855;
+  matrix[0][3] = 3;
+  matrix[1][0] = 0.446998;
+  matrix[1][1] = 0.892049;
+  matrix[1][2] = 0.104389;
+  matrix[1][3] = 4;
+  matrix[2][0] = -0.850904;
+  matrix[2][1] = 0.275963;
+  matrix[2][2] = 0.275963;
+  matrix[2][3] = 6;
+  matrix[3][0] = 0;
+  matrix[3][1] = 0;
+  matrix[3][2] = 0;
+  matrix[3][3] = 1;
+}
 #endif
