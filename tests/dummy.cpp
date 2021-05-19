@@ -3,6 +3,7 @@
 #include "Macierz3x3.hh"
 #include "Wektor3D.hh"
 #include "Prostopadloscian.hh"
+#include "Macierz4x4.hh"
 #define DL_BOKU 50
 #define SZ_BOKU 60
 #define WYSOKOSC_BOKU 30
@@ -14,13 +15,13 @@
 /*Testy klasy Matrix*/
 TEST_CASE("Konstruktor prametryczny")
 {
-    double m1[][SIZE] = {{3, 2, 4}, {1, 5, 6}};
-    double m2[][SIZE] = {{3, 5, 7}, {6, 7, 5}};
+    double m1[][SIZE] = {{3, 2, 4}, {1, 5, 6}, {3, 7, 5}};
+    double m2[][SIZE] = {{3, 5, 7}, {6, 7, 5}, {9, 0, 8}};
 
     Macierz3x3 ma(m1);
 
-    CHECK(ma == Matrix(m1));
-    CHECK(ma != Matrix(m2));
+    CHECK(ma == Macierz3x3(m1));
+    CHECK(ma != Macierz3x3(m2));
 }
 TEST_CASE("Konstruktor bezparametryczny")
 {
@@ -62,6 +63,22 @@ TEST_CASE("Operator *,test 2")
     we2 = ma1 * we1;
 
     CHECK_EQ(we2, we3);
+}
+TEST_CASE("Modyfikacja programu")
+{
+    double w1[] = {3, 4, 6};
+    Vector3D we1(w1);
+    Macierz4x4 ma1;
+    Macierz4x4 ma2;
+
+    ma1.ModRotacji(45, 45, 45, we1);
+    ma2.WyswietlWynik();
+    std::cout << std::endl;
+    std::cout << ma1 << std::endl;
+    std::cout << std::endl;
+    std::cout << ma2 << std::endl;
+
+    CHECK_EQ(ma1, ma2);
 }
 
 /*Testy dla klasy Cuboid*/
@@ -154,60 +171,80 @@ TEST_CASE("Translacja,test 3")
     cub1.translation(we2);
     std::cout << cub1 << std::endl;
     std::cout << std::endl;
+
     CHECK_EQ(cub1, cub2);
 }
-// TEST_CASE("Rotacja,test 1")
-// {
-//     double w1[] = {3, 4};
-//     double w2[] = {3, 4};
+TEST_CASE("Rotacja,test 1")
+{
+    double w1[] = {3, 4, 5};
+    double w2[] = {3, 4, 5};
 
-//     Vector3D we1(w1);
-//     Vector3D we2(w2);
+    Vector3D we1(w1);
+    Vector3D we2(w2);
 
-//     Cuboid re1(we1, DL_KROTKI_BOK, DL_DLUGI_BOK);
-//     Cuboid re2(we2, DL_KROTKI_BOK, DL_DLUGI_BOK);
+    Cuboid re1(we1, DL_BOKU, WYSOKOSC_BOKU, SZ_BOKU);
+    Cuboid re2(we2, DL_BOKU, WYSOKOSC_BOKU, SZ_BOKU);
 
-//     Macierz3x3 ma;
+    Macierz3x3 ma;
 
-//     ma.Calculate(90);
+    ma.rotuj_x(90);
 
-//     re1 = ma * re1;
-//     re2 = ma * re2;
+    re1 = ma * re1;
+    re2 = ma * re2;
 
-//     CHECK_EQ(re1, re2);
-// }
-// TEST_CASE("Rotacja,test 2")
-// {
-//     double w1[] = {3, 4};
-//     double w2[] = {3, 4};
+    CHECK_EQ(re1, re2);
+}
+TEST_CASE("Rotacja,test 2")
+{
+    double w1[] = {3, 4, 5};
+    double w2[] = {3, 4, 5};
 
-//     Vector3D we1(w1);
-//     Vector3D we2(w2);
+    Vector3D we1(w1);
+    Vector3D we2(w2);
 
-//     Cuboid re1(we1, DL_KROTKI_BOK, DL_DLUGI_BOK);
-//     Cuboid re2(we2, DL_KROTKI_BOK, DL_DLUGI_BOK);
+    Cuboid re1(we1, DL_BOKU, WYSOKOSC_BOKU, SZ_BOKU);
+    Cuboid re2(we2, DL_BOKU, WYSOKOSC_BOKU, SZ_BOKU);
 
-//     Macierz3x3 ma;
+    Macierz3x3 ma;
 
-//     ma.Calculate(-90);
+    ma.rotuj_y(90);
 
-//     re1 = ma * re1;
-//     re2 = ma * re2;
+    re1 = ma * re1;
+    re2 = ma * re2;
 
-//     CHECK_EQ(re1, re2);
-// }
-// TEST_CASE("Długość boków")
-// {
-//     double w1[] = {3, 4, 5};
+    CHECK_EQ(re1, re2);
+}
+TEST_CASE("Rotacja,TEST 3")
+{
+    double w1[] = {3, 4, 5};
+    double w2[] = {3, 4, 5};
 
-//     Vector3D we1(w1);
+    Vector3D we1(w1);
+    Vector3D we2(w2);
 
-//     Cuboid re1(we1, DL_KROTKI_BOK, DL_DLUGI_BOK);
+    Cuboid re1(we1, DL_BOKU, WYSOKOSC_BOKU, SZ_BOKU);
+    Cuboid re2(we2, DL_BOKU, WYSOKOSC_BOKU, SZ_BOKU);
 
-//     re1.length();
+    Macierz3x3 ma;
 
-//     CHECK_EQ(re1, re1);
-// }
+    ma.rotuj_z(90);
 
+    re1 = ma * re1;
+    re2 = ma * re2;
+
+    CHECK_EQ(re1, re2);
+}
+TEST_CASE("Długość boków")
+{
+    double w1[] = {3, 4, 5};
+
+    Vector3D we1(w1);
+
+    Cuboid re1(we1, DL_BOKU, WYSOKOSC_BOKU, SZ_BOKU);
+
+    re1.length();
+
+    CHECK_EQ(re1, re1);
+}
 // This is all that is needed to compile a test-runner executable.
 // More tests can be added here, or in a new tests/*.cpp file.
