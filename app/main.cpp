@@ -131,7 +131,7 @@ int main()
        Cuboid side(vector, WYSOKOSC_BOKU, SZ_BOKU, DL_BOKU);
        char option;
        char wymiar;
-      // int ile; //ile razy ma sie powturzyc obrut
+       int ile; //ile razy ma sie powturzyc obrut
        double angle;
        side.length();
        std::cout << std::endl;
@@ -155,14 +155,17 @@ int main()
               {
               case 'o':
               {
-                     std::cout << "Podaj wedlug ktorej osi bedziesz obracac prostopadloscian x,y lub z" << std::endl;
-                     do
-                     {
+                     std::cout << "Podaj wedlug ktorej osi bedziesz obracac prostopadloscian x,y lub z nastepnie po spacji kat" << std::endl;
+                     std::cin >> wymiar >> angle;
+                     std::cout << "Ile razy chcesz wykonac rotacje" << std::endl;
+                     std::cin >> ile;
 
+                     for (int i = 0; i < ile; i++)
+                     {
                             Macierz3x3 matrix;
                             matrix.Calculate(angle, wymiar);
                             side = matrix * side;
-                     } while (wymiar == '.');
+                     }
               }
               break;
               case 'p':
